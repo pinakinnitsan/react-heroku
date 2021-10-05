@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}`);
+      setData(res.data.data);
+    };
+
+    fetchData();
+  }, []);
+
+  if (!data) {
+    return <>Loading...</>;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="wrapper">
+      <p>
+        Hello, My name is {data.name}. I work at {data.company} and I know{" "}
+        {data.language}
+      </p>
     </div>
   );
-}
+};
 
 export default App;
